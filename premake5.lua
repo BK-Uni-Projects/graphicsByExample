@@ -1,7 +1,6 @@
 
 -- A solution contains projects, and defines the available configurations
 solution "graphicsByExample"
-   targetdir ( "bin" )
    configurations { "Debug", "Release"}
 
    flags { "Unicode" , "NoPCH"}
@@ -15,6 +14,8 @@ solution "graphicsByExample"
           kind "ConsoleApp"
           location (projectName)
           language "C++"
+          targetdir ( projectName )
+          
           configuration { "windows" }
              buildoptions ""
              linkoptions { "/NODEFAULTLIB:msvcrt" } -- https://github.com/yuriks/robotic/blob/master/premake5.lua
@@ -69,7 +70,11 @@ solution "graphicsByExample"
           configuration "*Release"
              defines { "NDEBUG" }
              optimize "On"
+             targetsuffix "-release"
 
+             
+          -- copy dlls on windows 
           configuration "windows"
-             postbuildcommands { "post-build-event.bat" }
+             os.copyfile("./graphics_dependencies/glew/bin/Release/Win32/glew32.dll", path.join(projectName, "glew32.dll"))
+             os.copyfile("./graphics_dependencies/SDL2/lib/win32/SDL2.dll", path.join(projectName, "SDL2.dll"))
    end

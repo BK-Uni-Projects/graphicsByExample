@@ -35,11 +35,9 @@ std::string frameLine = "";
 const std::string strVertexShader = R"(
 	#version 330
 	in vec2 position;
-	uniform vec2 offset;
 	void main()
 	{
-	   vec2 tmpPosition = position + offset;
-     gl_Position = vec4(tmpPosition, 0.0, 1.0);
+	   gl_Position = vec4(position, 0.0, 1.0);
 	}
 )";
 // end::vertexShader[]
@@ -49,9 +47,10 @@ const std::string strVertexShader = R"(
 const std::string strFragmentShader = R"(
 	#version 330
 	out vec4 outputColor;
+  uniform vec3 color;
 	void main()
 	{
-	   outputColor = vec4(1.0f, 1.0f, 1.0f, 1.0f);
+	   outputColor = vec4(color, 1.0f);
 	}
 )";
 // end::fragmentShader[]
@@ -66,15 +65,14 @@ const GLfloat vertexData[] = {
 	 0.433f, -0.250f,
 };
 
-//the offset we'll pass to the GLSL
-GLfloat offset[] = { -0.5, -0.5 }; //using different values from CPU and static GLSL examples, to make it clear this is working
-GLfloat offsetVelocity[] = { 0.2, 0.2 }; //rate of change of offset in units per second
+//the color we'll pass to the GLSL
+GLfloat color[] = { 1.0f, 1.0f, 1.0f }; //using different values from CPU and static GLSL examples, to make it clear this is working
 
 //our GL and GLSL variables
 
 GLuint theProgram; //GLuint that we'll fill in to refer to the GLSL program (only have 1 at this point)
-GLint positionLocation; //GLuint that we'll fill in with the location of the `offset` variable in the GLSL
-GLint offsetLocation; //GLuint that we'll fill in with the location of the `offset` variable in the GLSL
+GLint positionLocation; //GLuint that we'll fill in with the location of the `position` attribute in the GLSL
+GLint colorLocation; //GLuint that we'll fill in with the location of the `color` variable in the GLSL
 
 GLuint vertexDataBufferObject;
 GLuint vertexArrayObject;
@@ -236,7 +234,7 @@ void initializeProgram()
 	}
 
 	positionLocation = glGetAttribLocation(theProgram, "position");
-	offsetLocation = glGetUniformLocation(theProgram, "offset");
+	colorLocation = glGetUniformLocation(theProgram, "color");
 	//clean up shaders (we don't need them anymore as they are no in theProgram
 	for_each(shaderList.begin(), shaderList.end(), glDeleteShader);
 }
@@ -339,9 +337,9 @@ void render()
 	glUseProgram(theProgram); //installs the program object specified by program as part of current rendering state
 
 	//load data to GLSL that **may** have changed
-	glUniform2f(offsetLocation, offset[0], offset[1]);
+	glUniform3f(colorLocation, color[0], color[1], color[2]);
 		//alternatively, use glUnivform2fv
-		//glUniform2fv(offsetLocation, 1, offset); //Note: the count is 1, because we are setting a single uniform vec2 - https://www.opengl.org/wiki/GLSL_:_common_mistakes#How_to_use_glUniform
+		//glUniform2fv(colorLocation, 1, color); //Note: the count is 1, because we are setting a single uniform vec2 - https://www.opengl.org/wiki/GLSL_:_common_mistakes#How_to_use_glUniform
 
 	glBindVertexArray(vertexArrayObject);
 
