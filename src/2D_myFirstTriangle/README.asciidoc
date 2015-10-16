@@ -43,8 +43,9 @@ include::../../doc/_includes/buildAndRun.asciidoc[]
 
 . Make the triangle change colour on a keypress
   .. *Questions*
-    ... Which part of the code controls this?
+    ... Which part of the code controls this? Where is triangle colour set?
     ... How do you specify the key?
+        How do you pass information to where it is needed?
     .. Make it change just once
     .. Make it change each time the key is pressed
 
@@ -60,14 +61,16 @@ include::../../doc/_includes/buildAndRun.asciidoc[]
 
 . Make the triangle colour change over time
   .. *Questions*
-    ... Where is triangle colour set?
-    ... Where does this point get information from?
-    ... How do you give it more information?
+    ... How do you know the time?
+    ... Do you pass in the time, or a color? Does it matter?
   .. make the colour start at black, and get more red, forever
   .. make the colour start at black, go fully red, go back to black, and repeat
 
 . Make the triangle have different colours for each of its points
+  .. Each "vertex" presently has position information
+  .. We want color information for each vertex also
   .. *Questions*
+    ... Where is this information in our C++;
     ... Where is this extra information needed?
     ... How to you get this extra information to that point?
       .... What happens to the information between these stages?
