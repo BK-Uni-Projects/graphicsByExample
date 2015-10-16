@@ -22,5 +22,5 @@ git checkout $EXAMPLE
 git pull
 ./premake5 gmake
 make $EXAMPLE
-./bin/$EXAMPLE-debug
+./src/$EXAMPLE/$EXAMPLE-debug
 ----

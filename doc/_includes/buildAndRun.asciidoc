@@ -40,7 +40,7 @@
 [source, bash]
 ----
 make $EXAMPLE # <1> <2> <3> <4>
-./bin/$EXAMPLE-debug # <5>
+./src/$EXAMPLE/$EXAMPLE-debug # <5>
 ----
 <1> replace `EXAMPLE` with the example you wish to run
 <2> compile and link project `EXAMPLE`.

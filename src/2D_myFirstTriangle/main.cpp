@@ -55,6 +55,7 @@ const std::string strFragmentShader = R"(
 )";
 // end::fragmentShader[]
 
+// tag::ourVariables[]
 //our variables
 bool done = false;
 
@@ -77,10 +78,13 @@ GLint colorLocation; //GLuint that we'll fill in with the location of the `color
 GLuint vertexDataBufferObject;
 GLuint vertexArrayObject;
 
+// end::ourVariables[]
+
+
 // end Global Variables
 /////////////////////////
 
-
+// tag::initialise[]
 void initialise()
 {
 	if (SDL_Init(SDL_INIT_EVERYTHING) != 0){
@@ -89,7 +93,9 @@ void initialise()
 	}
 	cout << "SDL initialised OK!\n";
 }
+// end::initialise[]
 
+// tag::createWindow[]
 void createWindow()
 {
 	//get executable name, and use as window title
@@ -111,7 +117,9 @@ void createWindow()
 	}
 	cout << "SDL CreatedWindow OK!\n";
 }
+// end::createWindow[]
 
+// tag::setGLAttributes[]
 void setGLAttributes()
 {
   int major = 3;
@@ -123,7 +131,9 @@ void setGLAttributes()
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE); //core profile
 	cout << "Set OpenGL context to versicreate remote branchon " << major << "." << minor << " OK!\n";
 }
+// tag::setGLAttributes[]
 
+// tag::createContext[]
 void createContext()
 {
 	setGLAttributes();
@@ -137,7 +147,9 @@ void createContext()
 	}
 	cout << "Created OpenGL context OK!\n";
 }
+// end::createContext[]
 
+// tag::initGlew[]
 void initGlew()
 {
 	GLenum rev;
@@ -152,7 +164,9 @@ void initGlew()
 		cout << "GLEW Init OK!\n";
 	}
 }
+// end::initGlew[]
 
+// tag::createShader[]
 GLuint createShader(GLenum eShaderType, const std::string &strShaderFile)
 {
 	GLuint shader = glCreateShader(eShaderType);
@@ -186,7 +200,9 @@ GLuint createShader(GLenum eShaderType, const std::string &strShaderFile)
 
 	return shader;
 }
+// end::createShader[]
 
+// tag::createProgram[]
 GLuint createProgram(const std::vector<GLuint> &shaderList)
 {
 	GLuint program = glCreateProgram();
@@ -214,7 +230,9 @@ GLuint createProgram(const std::vector<GLuint> &shaderList)
 
 	return program;
 }
+// end::createProgram[]
 
+// tag::initializeProgram[]
 void initializeProgram()
 {
 	std::vector<GLuint> shaderList;
@@ -238,27 +256,11 @@ void initializeProgram()
 	//clean up shaders (we don't need them anymore as they are no in theProgram
 	for_each(shaderList.begin(), shaderList.end(), glDeleteShader);
 }
+// end::initializeProgram[]
 
-void initializeVertexBuffer()
-{
-	glGenBuffers(1, &vertexDataBufferObject);
-
-	glBindBuffer(GL_ARRAY_BUFFER, vertexDataBufferObject);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertexData), vertexData, GL_STATIC_DRAW);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	cout << "vertexDataBufferObject created OK! GLUint is: " << vertexDataBufferObject << std::endl;
-}
-
-void loadAssets()
-{
-	initializeProgram(); //create GLSL Shaders, link into a GLSL program, and get IDs of attributes and variables
-
-	initializeVertexBuffer(); //load data into a vertex buffer
-
-	cout << "Loaded Assets OK!\n";
-}
-
-void setupvertexArrayObject()
+// tag::initializeVertexArrayObject[]
+//setup a GL object (a VertexArrayObject) that stores how to access data and from where
+void initializeVertexArrayObject()
 {
 	glGenVertexArrays(1, &vertexArrayObject); //create a Vertex Array Object
 	cout << "Vertex Array Object created OK! GLUint is: " << vertexArrayObject << std::endl;
@@ -278,7 +280,34 @@ void setupvertexArrayObject()
 	glBindBuffer(GL_ARRAY_BUFFER, 0); //unbind array buffer
 
 }
+// end::initializeVertexArrayObject[]
 
+// tag::initializeVertexBuffer[]
+void initializeVertexBuffer()
+{
+	glGenBuffers(1, &vertexDataBufferObject);
+
+	glBindBuffer(GL_ARRAY_BUFFER, vertexDataBufferObject);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertexData), vertexData, GL_STATIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	cout << "vertexDataBufferObject created OK! GLUint is: " << vertexDataBufferObject << std::endl;
+
+  initializeVertexArrayObject();
+}
+// end::initializeVertexBuffer[]
+
+// tag::loadAssets[]
+void loadAssets()
+{
+	initializeProgram(); //create GLSL Shaders, link into a GLSL program, and get IDs of attributes and variables
+
+	initializeVertexBuffer(); //load data into a vertex buffer
+
+	cout << "Loaded Assets OK!\n";
+}
+// end::loadAssets[]
+
+// tag::handleInput[]
 void handleInput()
 {
 	//Event-based input handling
@@ -319,19 +348,28 @@ void handleInput()
 		}
 	}
 }
+// end::handleInput[]
 
-void updateSimulation(double simLength) //update simulation with an amount of time to simulate for (in seconds)
+// tag::updateSimulation[]
+void updateSimulation(double simLength = 0.02) //update simulation with an amount of time to simulate for (in seconds)
 {
+  //WARNING - we should calculate an appropriate amount of time to simulate - not always use a constant amount of time
+      // see, for example, http://headerphile.blogspot.co.uk/2014/07/part-9-no-more-delays.html
+
   //CHANGE ME
 }
+// end::updateSimulation[]
 
+// tag::preRender[]
 void preRender()
 {
 	glViewport(0, 0, 600, 600); //set viewpoint
 	glClearColor(1.0f, 0.0f, 0.0f, 1.0f); //set clear colour
 	glClear(GL_COLOR_BUFFER_BIT); //clear the window (technical the scissor box bounds)
 }
+// end::preRender[]
 
+// tag::render[]
 void render()
 {
 	glUseProgram(theProgram); //installs the program object specified by program as part of current rendering state
@@ -350,7 +388,9 @@ void render()
 	glUseProgram(0); //clean up
 
 }
+// end::render[]
 
+// tag::postRender[]
 void postRender()
 {
 	SDL_GL_SwapWindow(win);; //present the frame buffer to the display (swapBuffers)
@@ -358,14 +398,18 @@ void postRender()
   cout << "\r" << frameLine << std::flush;
   frameLine = "";
 }
+// end::postRender[]
 
+// tag::cleanUp[]
 void cleanUp()
 {
 	SDL_GL_DeleteContext(context);
 	SDL_DestroyWindow(win);
 	cout << "Cleaning up OK!\n";
 }
+// end::cleanUp[]
 
+// tag::main[]
 int main( int argc, char* args[] )
 {
 	exeName = args[0];
@@ -387,20 +431,15 @@ int main( int argc, char* args[] )
 	//- load vertex data
 	loadAssets();
 
-	//setup a GL object (a VertexArrayObject) that stores how to access data and from where
-	setupvertexArrayObject();
-
 	while (!done) //loop until done flag is set)
 	{
-		handleInput();
+		handleInput(); // this should ONLY SET VARIABLES
 
-		updateSimulation(0.02); //call update simulation with an amount of time to simulate for (in seconds)
-		  //WARNING - we are always updating by a constant amount of time. This should be tied to how long has elapsed
-		    // see, for example, http://headerphile.blogspot.co.uk/2014/07/part-9-no-more-delays.html
+		updateSimulation(); // this should ONLY SET VARIABLES according to simulation
 
 		preRender();
 
-		render(); //RENDER HERE - PLACEHOLDER
+		render(); // this should render the world state according to VARIABLES - 
 
 		postRender();
 
@@ -412,3 +451,4 @@ int main( int argc, char* args[] )
 
 	return 0;
 }
+// end::main[]
