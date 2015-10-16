@@ -70,6 +70,7 @@ solution "graphicsByExample"
           configuration "*Release"
              defines { "NDEBUG" }
              optimize "On"
+             targetsuffix "-release"
 
              
           -- copy dlls on windows 

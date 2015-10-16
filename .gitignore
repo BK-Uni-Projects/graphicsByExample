@@ -1,5 +1,9 @@
 /.project
 
+## Ignore binaries generated
+*-debug
+*-release
+
 ## Ignore Visual Studio Solution and Project files - using premake, so we don't want them versioned
 *.vcxproj*
 *.sln
