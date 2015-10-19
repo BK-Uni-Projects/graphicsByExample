@@ -45,13 +45,13 @@ const std::string strVertexShader = R"(
 // tag::fragmentShader[]
 //string holding the **source** of our fragment shader, to save loading from a file
 const std::string strFragmentShader = R"(
-	#version 330
-	out vec4 outputColor;
+  #version 330
+  out vec4 outputColor;
   uniform vec3 color;
-	void main()
-	{
-	   outputColor = vec4(color, 1.0f);
-	}
+  void main()
+  {
+     outputColor = vec4(color, 1.0f);
+   }
 )";
 // end::fragmentShader[]
 
@@ -375,9 +375,10 @@ void render()
 	glUseProgram(theProgram); //installs the program object specified by program as part of current rendering state
 
 	//load data to GLSL that **may** have changed
-	glUniform3f(colorLocation, color[0], color[1], color[2]);
-		//alternatively, use glUnivform2fv
-		//glUniform2fv(colorLocation, 1, color); //Note: the count is 1, because we are setting a single uniform vec2 - https://www.opengl.org/wiki/GLSL_:_common_mistakes#How_to_use_glUniform
+  //comment/uncomment to change color
+  glUniform3f(colorLocation, 1.0f, 1.0f, 1.0f); // set uniform to WHITE
+  //glUniform3f(colorLocation, 0.5f, 0.0f, 0.5f); // set uniform to PURPLE
+  //glUniform3f(colorLocation, 1.0f, 0.65f, 0.0f); // set uniform to ORANGE
 
 	glBindVertexArray(vertexArrayObject);
 
@@ -439,7 +440,7 @@ int main( int argc, char* args[] )
 
 		preRender();
 
-		render(); // this should render the world state according to VARIABLES - 
+		render(); // this should render the world state according to VARIABLES -
 
 		postRender();
 
