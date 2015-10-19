@@ -1,44 +1,32 @@
-== 2D Triangle Color
+== Input from Key Presses
 :toc:
 :!numbered:
 
-The colour of fragments (that *may* be written to the colour buffer) are set in the *fragment shader*.
+Input handling is outside the scope of OpenGL - we can handle input any way we choose. In these examples we were using the https://libsdl.org/[SDL library] for input handling.
 
-=== Fragment Shader
+In the underlying operating system, each key press and each key release generates an *event*. SDL stores these events for us and to handle input we need to process the event list and use this information to set variables in our *"game state"*.
 
-In this example, the color is passed to the fragment shader as a `uniform` variable. A `uniform` is a global `GLSL` variable. They do not change from one execution of the shader program to the next.
+=== Game State
 
-[source,c++]
-.fragment shader
-----
-include::main.cpp[tags=fragmentShader]
-----
-
-=== glGetUniformLocation
-
-`uniform` variables are stored in a program object.
-
-In order to set a `uniform` variable, our C++ code need to know the `location` of the variable in the program object.
-
-In this example we ask OpenGL for this location in `initializeProgram` with https://www.opengl.org/sdk/docs/man4/html/glGetUniform.xhtml[`glGetUniformLocation`].
+In this example, we'll just set the C++ `color` variable. Our render loop can then *use* this variable to set the uniform for the color.
 
 [source,c++]
-.initializeProgram
+.ourVariables
 ----
-include::main.cpp[tags=initializeProgram]
+include::main.cpp[tags=ourVariables]
 ----
 
-=== glUniform3f
+=== Setting Game State with input
 
-With this location value, and the program object bound, we can set the uniform value in our `render` function with https://www.opengl.org/sdk/docs/man4/html/glUniform.xhtml[`glUniform3f`]
+Each frame we should check for input events, and respond to each.
+
+WARNING: with input handling we should only *SET* parts of our game state. We shouldn't do any OpenGL calls. We also shouldn't do any simulation changes. These should take place in an `updateSimulation` stage.
 
 [source,c++]
-.render
+.handleInput
 ----
-include::main.cpp[tags=render]
+include::main.cpp[tags=handleInput]
 ----
-
-
 
 
 include::../../doc/_includes/gettingTheSource.asciidoc[]

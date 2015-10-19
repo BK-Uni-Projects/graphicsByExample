@@ -67,7 +67,7 @@ const GLfloat vertexData[] = {
 };
 
 //the color we'll pass to the GLSL
-GLfloat color[] = { 1.0f, 1.0f, 1.0f }; //using different values from CPU and static GLSL examples, to make it clear this is working
+GLfloat color[] = { 1.0f, 1.0f, 1.0f }; // the color we'll use for the triangle
 
 //our GL and GLSL variables
 
@@ -310,43 +310,47 @@ void loadAssets()
 // tag::handleInput[]
 void handleInput()
 {
-	//Event-based input handling
-	//The underlying OS is event-based, so **each** key-up or key-down (for example)
-	//generates an event.
-	//  - https://wiki.libsdl.org/SDL_PollEvent
-	//In some scenarios we want to catch **ALL** the events, not just to present state
-	//  - for instance, if taking keyboard input the user might key-down two keys during a frame
-	//    - we want to catch based, and know the order
-	//  - or the user might key-down and key-up the same within a frame, and we still want something to happen (e.g. jump)
-	//  - the alternative is to Poll the current state with SDL_GetKeyboardState
+  //Event-based input handling
+  //The underlying OS is event-based, so **each** key-up or key-down (for example)
+  //generates an event.
+  //  - https://wiki.libsdl.org/SDL_PollEvent
+  //In some scenarios we want to catch **ALL** the events, not just to present state
+  //  - for instance, if taking keyboard input the user might key-down two keys during a frame
+  //    - we want to catch based, and know the order
+  //  - or the user might key-down and key-up the same within a frame, and we still want something to happen (e.g. jump)
+  //  - the alternative is to Poll the current state with SDL_GetKeyboardState
 
-	SDL_Event event; //somewhere to store an event
+  SDL_Event event; //somewhere to store an event
 
-	//NOTE: there may be multiple events per frame
-	while (SDL_PollEvent(&event)) //loop until SDL_PollEvent returns 0 (meaning no more events)
-	{
-		switch (event.type)
-		{
-		case SDL_QUIT:
-			done = true; //set donecreate remote branch flag if SDL wants to quit (i.e. if the OS has triggered a close event,
-							//  - such as window close, or SIGINT
-			break;
+  //NOTE: there may be multiple events per frame
+  while (SDL_PollEvent(&event)) //loop until SDL_PollEvent returns 0 (meaning no more events)
+  {
+    switch (event.type)
+    {
+    case SDL_QUIT:
+      done = true; //set done flag if SDL wants to quit (i.e. if the OS has triggered a close event,
+              //  - such as window close, or SIGINT
+      break;
 
-			//keydown handling - we should to the opposite on key-up for direction controls (generally)
-		case SDL_KEYDOWN:
-			//Keydown can fire repeatable if key-repeat is on.
-			//  - the repeat flag is set on the keyboard event, if this is a repeat event
-			//  - in our case, we're going to ignore repeat events
-			//  - https://wiki.libsdl.org/SDL_KeyboardEvent
-			if (!event.key.repeat)
-				switch (event.key.keysym.sym)
-				{
-					//hit escape to exit
-					case SDLK_ESCAPE: done = true;
-				}
-			break;
-		}
-	}
+      //keydown handling - we should to the opposite on key-up for direction controls (generally)
+    case SDL_KEYDOWN:
+      //Keydown can fire repeatable if key-repeat is on.
+      //  - the repeat flag is set on the keyboard event, if this is a repeat event
+      //  - in our case, we're going to ignore repeat events
+      //  - https://wiki.libsdl.org/SDL_KeyboardEvent
+      if (!event.key.repeat)
+        switch (event.key.keysym.sym)
+        {
+          //hit escape to exit
+          case SDLK_ESCAPE:
+            done = true;
+            break;
+          case SDLK_c:
+            color[0] = 1 - color[0]; //invert the RED component
+        }
+      break;
+    }
+  }
 }
 // end::handleInput[]
 
@@ -375,10 +379,7 @@ void render()
 	glUseProgram(theProgram); //installs the program object specified by program as part of current rendering state
 
 	//load data to GLSL that **may** have changed
-  //comment/uncomment to change color
-  glUniform3f(colorLocation, 1.0f, 1.0f, 1.0f); // set uniform to WHITE
-  //glUniform3f(colorLocation, 0.5f, 0.0f, 0.5f); // set uniform to PURPLE
-  //glUniform3f(colorLocation, 1.0f, 0.65f, 0.0f); // set uniform to ORANGE
+  glUniform3f(colorLocation, color[0], color[1], color[2]); // set uniform from our C++ variable
 
 	glBindVertexArray(vertexArrayObject);
 
