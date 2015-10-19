@@ -363,9 +363,17 @@ void updateSimulation(double simLength = 0.02) //update simulation with an amoun
 // tag::preRender[]
 void preRender()
 {
-	glViewport(0, 0, 600, 600); //set viewpoint
-	glClearColor(1.0f, 0.0f, 0.0f, 1.0f); //set clear colour
-	glClear(GL_COLOR_BUFFER_BIT); //clear the window (technical the scissor box bounds)
+  glViewport(0, 0, 600, 600); //set viewpoint
+
+  // comment/uncomment to control
+  //           RED  GREEN  BLUE  ALPHA
+  glClearColor(1.0f, 0.0f, 0.0f, 1.0f); // clear to WHITE
+  //glClearColor(0.0f, 0.0f, 1.0f, 1.0f); // clear to BLUE
+  //glClearColor(0.0f, 1.0f, 0.0f, 1.0f); // clear to GREEN
+  //glClearColor(0.0f, 0.0f, 0.0f, 1.0f); // clear to BLACK
+  //glClearColor(1.0f, 1.0f, 0.0f, 1.0f); // clear to YELLOW
+
+  glClear(GL_COLOR_BUFFER_BIT); //clear the window (technical the scissor box bounds)
 }
 // end::preRender[]
 
