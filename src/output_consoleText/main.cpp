@@ -27,6 +27,9 @@ std::string exeName;
 SDL_Window *win; //pointer to the SDL_Window
 SDL_GLContext context; //the SDL_GLContext
 int frameCount = 0;
+uint timeLastFrame = 0;
+uint timeFramesLastLimit = 100;
+std::vector<float> timeFramesLastX;
 std::string frameLine = "";
 // end::globalVariables[]
 
@@ -393,8 +396,36 @@ void render()
 // tag::postRender[]
 void postRender()
 {
-	SDL_GL_SwapWindow(win);; //present the frame buffer to the display (swapBuffers)
+  SDL_GL_SwapWindow(win);; //present the frame buffer to the display (swapBuffers)
+
+  //count Frames, and update frameLine
   frameLine += "Frame: " + std::to_string(frameCount++);
+
+  //track realtime, and update frameLine
+  uint timeNow = SDL_GetTicks();
+  uint timeElapsed = timeNow - timeLastFrame;
+  timeLastFrame = timeNow;
+
+  //track last timeFramesLastLimit frame durations and average
+  timeFramesLastX.push_back(timeElapsed);
+  if (timeFramesLastX.size() > timeFramesLastLimit)
+  {
+    timeFramesLastX.erase(timeFramesLastX.begin());
+  }
+  float mean = 0;
+  for(std::vector<float>::iterator it = timeFramesLastX.begin(); it != timeFramesLastX.end(); ++it)
+  {
+    mean += *it;
+  }
+  mean = mean / timeFramesLastX.size();
+
+  // update frame line with time information
+  frameLine += " Runtime: " + std::to_string((float)timeNow / 1000);
+  frameLine += " Frame duration: " + std::to_string((float)timeElapsed / 1000);
+  frameLine += " FPS: " + std::to_string(1000.0f / (float)timeElapsed);
+  frameLine += " FPS(mean): " + std::to_string(mean);
+
+  //write frameLine to console - overwrites 
   cout << "\r" << frameLine << std::flush;
   frameLine = "";
 }
@@ -439,7 +470,7 @@ int main( int argc, char* args[] )
 
 		preRender();
 
-		render(); // this should render the world state according to VARIABLES - 
+		render(); // this should render the world state according to VARIABLES -
 
 		postRender();
 
