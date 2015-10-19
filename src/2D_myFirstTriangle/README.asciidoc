@@ -19,6 +19,8 @@ include::../../doc/_includes/buildAndRun.asciidoc[]
 * You can do these in any order.
 * You may want to make a new git branch for these
 * Try to answer the questions for each also
+* Each activity has example solutions in git branches
+  ** you should look at these *after* attempting a solution yourself
 
 //
 
@@ -31,6 +33,7 @@ include::../../doc/_includes/buildAndRun.asciidoc[]
   .. Green
   .. Black
   .. Yellow
+  .. **Example Branch** - for example solutions - `2D_backgroundColor`
 
 
 . Make the triangle a different colour
@@ -39,6 +42,8 @@ include::../../doc/_includes/buildAndRun.asciidoc[]
     ... What language is it?
   .. Purple
   .. Orange
+  .. **Example Branch** - for example solutions - `2D_triangleColor`
+
 
 
 . Make the triangle change colour on a keypress
@@ -48,6 +53,7 @@ include::../../doc/_includes/buildAndRun.asciidoc[]
         How do you pass information to where it is needed?
     .. Make it change just once
     .. Make it change each time the key is pressed
+    .. **Example Branch** - for example solutions - `input_keyPress`
 
 . Add details to the console text
   .. *Questions*
@@ -58,6 +64,7 @@ include::../../doc/_includes/buildAndRun.asciidoc[]
   .. add how long the frame took to render
   .. add the frames per second
   .. make the frames per second an average over a few frames [stretch]
+  .. **Example Branch** - for example solutions - `output_consoleText`
 
 . Make the triangle colour change over time
   .. *Questions*
@@ -65,6 +72,7 @@ include::../../doc/_includes/buildAndRun.asciidoc[]
     ... Do you pass in the time, or a color? Does it matter?
   .. make the colour start at black, and get more red, forever
   .. make the colour start at black, go fully red, go back to black, and repeat
+  .. **Example Branch** - for example solutions - `time_2D_triangleColor`
 
 . Make the triangle have different colours for each of its points
   .. Each "vertex" presently has position information
@@ -76,6 +84,7 @@ include::../../doc/_includes/buildAndRun.asciidoc[]
       .... What happens to the information between these stages?
     ... How do you specify that extra information?
   .. Make the three vertices Red, Green, and Blue
+  .. **Example Branch** - for example solutions - `2D_triangleColorPerVertex`
 
 === Stretch Activities
 
