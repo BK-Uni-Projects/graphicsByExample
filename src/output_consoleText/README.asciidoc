@@ -1,8 +1,9 @@
-== 2D My First Triangle
+== Output Console Text
 :toc:
 :!numbered:
 
-=== Summary
+Console output is outside the scope of OpenGL, so we can do it any way we choose. SDL doesn't have any direct support for console output, so we can just do it ourselves in plain C++.
+
 
 This example just renders a single, white triangle on a red background every frame.
 
