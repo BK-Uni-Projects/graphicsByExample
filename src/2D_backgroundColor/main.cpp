@@ -439,7 +439,7 @@ int main( int argc, char* args[] )
 
 		preRender();
 
-		render(); // this should render the world state according to VARIABLES - 
+		render(); // this should render the world state according to VARIABLES -
 
 		postRender();
 
