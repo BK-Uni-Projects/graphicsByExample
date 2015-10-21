@@ -65,9 +65,10 @@ bool done = false;
 
 //the data about our geometry
 const GLfloat vertexData[] = {
-	 0.000f,  0.500f,
-	-0.433f, -0.250f,
-	 0.433f, -0.250f,
+	X			Y
+	 0.000f,	0.500f,
+	-0.433f,	-0.250f,
+	 0.433f,	-0.250f,
 };
 
 //the color we'll pass to the GLSL
