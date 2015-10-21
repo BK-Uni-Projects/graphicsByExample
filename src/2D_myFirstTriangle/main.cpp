@@ -17,9 +17,13 @@
 #include <SDL.h>
 // end::includes[]
 
-// tag::namespace[]
-using namespace std;
-// end::namespace[]
+// tag::using[]
+// see https://isocpp.org/wiki/faq/Coding-standards#using-namespace-std
+// don't use the whole namespace, either use the specific ones you want, or just type std:: 
+using std::cout;
+using std::endl;
+using std::max;
+// end::using[]
 
 
 // tag::globalVariables[]
@@ -439,7 +443,7 @@ int main( int argc, char* args[] )
 
 		preRender();
 
-		render(); // this should render the world state according to VARIABLES - 
+		render(); // this should render the world state according to VARIABLES -
 
 		postRender();
 
