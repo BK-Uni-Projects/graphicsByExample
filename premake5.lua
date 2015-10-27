@@ -15,7 +15,7 @@ solution "graphicsByExample"
           location (projectName)
           language "C++"
           targetdir ( projectName )
-          
+
           configuration { "windows" }
              buildoptions ""
              linkoptions { "/NODEFAULTLIB:msvcrt" } -- https://github.com/yuriks/robotic/blob/master/premake5.lua
@@ -72,9 +72,10 @@ solution "graphicsByExample"
              optimize "On"
              targetsuffix "-release"
 
-             
-          -- copy dlls on windows 
-          configuration "windows"
+
+          -- copy dlls on windows
+          if os.get() == "windows" then
              os.copyfile("./graphics_dependencies/glew/bin/Release/Win32/glew32.dll", path.join(projectName, "glew32.dll"))
              os.copyfile("./graphics_dependencies/SDL2/lib/win32/SDL2.dll", path.join(projectName, "SDL2.dll"))
+          end
    end

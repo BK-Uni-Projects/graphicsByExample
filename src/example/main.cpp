@@ -3,7 +3,7 @@
 #define STRING(x) STRING2(x)
 
 #if __cplusplus < 201103L
-  #pragma message("WARNING: the compiler may not be C++11 compliant. __cplusplus version is : " STRING(__cplusplus))
+	#pragma message("WARNING: the compiler may not be C++11 compliant. __cplusplus version is : " STRING(__cplusplus))
 #endif
 // end::C++11check[]
 
@@ -17,9 +17,13 @@
 #include <SDL.h>
 // end::includes[]
 
-// tag::namespace[]
-using namespace std;
-// end::namespace[]
+// tag::using[]
+// see https://isocpp.org/wiki/faq/Coding-standards#using-namespace-std
+// don't use the whole namespace, either use the specific ones you want, or just type std::
+using std::cout;
+using std::endl;
+using std::max;
+// end::using[]
 
 
 // tag::globalVariables[]
@@ -37,7 +41,7 @@ const std::string strVertexShader = R"(
 	in vec2 position;
 	void main()
 	{
-	   gl_Position = vec4(position, 0.0, 1.0);
+		 gl_Position = vec4(position, 0.0, 1.0);
 	}
 )";
 // end::vertexShader[]
@@ -47,10 +51,10 @@ const std::string strVertexShader = R"(
 const std::string strFragmentShader = R"(
 	#version 330
 	out vec4 outputColor;
-  uniform vec3 color;
+	uniform vec3 color;
 	void main()
 	{
-	   outputColor = vec4(color, 1.0f);
+		 outputColor = vec4(color, 1.0f);
 	}
 )";
 // end::fragmentShader[]
@@ -61,9 +65,10 @@ bool done = false;
 
 //the data about our geometry
 const GLfloat vertexData[] = {
-	 0.000f,  0.500f,
-	-0.433f, -0.250f,
-	 0.433f, -0.250f,
+	X			Y
+	 0.000f,	0.500f,
+	-0.433f,	-0.250f,
+	 0.433f,	-0.250f,
 };
 
 //the color we'll pass to the GLSL
@@ -122,7 +127,7 @@ void createWindow()
 // tag::setGLAttributes[]
 void setGLAttributes()
 {
-  int major = 3;
+	int major = 3;
 	int minor = 3;
 	cout << "Built for OpenGL Version " << major << "." << minor << endl; //ahttps://en.wikipedia.org/wiki/OpenGL_Shading_Language#Versions
 	// set the opengl context version
@@ -292,7 +297,7 @@ void initializeVertexBuffer()
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	cout << "vertexDataBufferObject created OK! GLUint is: " << vertexDataBufferObject << std::endl;
 
-  initializeVertexArrayObject();
+	initializeVertexArrayObject();
 }
 // end::initializeVertexBuffer[]
 
@@ -353,10 +358,10 @@ void handleInput()
 // tag::updateSimulation[]
 void updateSimulation(double simLength = 0.02) //update simulation with an amount of time to simulate for (in seconds)
 {
-  //WARNING - we should calculate an appropriate amount of time to simulate - not always use a constant amount of time
-      // see, for example, http://headerphile.blogspot.co.uk/2014/07/part-9-no-more-delays.html
+	//WARNING - we should calculate an appropriate amount of time to simulate - not always use a constant amount of time
+			// see, for example, http://headerphile.blogspot.co.uk/2014/07/part-9-no-more-delays.html
 
-  //CHANGE ME
+	//CHANGE ME
 }
 // end::updateSimulation[]
 
@@ -394,9 +399,9 @@ void render()
 void postRender()
 {
 	SDL_GL_SwapWindow(win);; //present the frame buffer to the display (swapBuffers)
-  frameLine += "Frame: " + std::to_string(frameCount++);
-  cout << "\r" << frameLine << std::flush;
-  frameLine = "";
+	frameLine += "Frame: " + std::to_string(frameCount++);
+	cout << "\r" << frameLine << std::flush;
+	frameLine = "";
 }
 // end::postRender[]
 
@@ -424,7 +429,7 @@ int main( int argc, char* args[] )
 
 	glViewport(0,0,600,600); //should check what the actual window res is?
 
-  SDL_GL_SwapWindow(win); //force a swap, to make the trace clearer
+	SDL_GL_SwapWindow(win); //force a swap, to make the trace clearer
 
 	//do stuff that only needs to happen once
 	//- create shaders
@@ -439,7 +444,7 @@ int main( int argc, char* args[] )
 
 		preRender();
 
-		render(); // this should render the world state according to VARIABLES - 
+		render(); // this should render the world state according to VARIABLES -
 
 		postRender();
 
