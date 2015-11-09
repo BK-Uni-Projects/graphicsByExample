@@ -9,6 +9,8 @@
 
 // tag::includes[]
 #include <iostream>
+#include <fstream>
+#include <iterator>
 #include <vector>
 #include <algorithm>
 #include <string>
@@ -21,8 +23,10 @@
 // see https://isocpp.org/wiki/faq/Coding-standards#using-namespace-std
 // don't use the whole namespace, either use the specific ones you want, or just type std::
 using std::cout;
+using std::cerr;
 using std::endl;
 using std::max;
+using std::string;
 // end::using[]
 
 
@@ -34,33 +38,24 @@ int frameCount = 0;
 std::string frameLine = "";
 // end::globalVariables[]
 
-// tag::vertexShader[]
-//string holding the **source** of our vertex shader, to save loading from a file
-const std::string strVertexShader = R"(
-	#version 330
-	in vec2 position;
-	in vec4 vertexColor;
-	out vec4 fragmentColor;
-	void main()
+// tag::loadShader[]
+std::string loadShader(const string filePath) {
+    std::ifstream fileStream(filePath, std::ios::in | std::ios::binary);
+	if (fileStream)
 	{
-		 gl_Position = vec4(position, 0.0, 1.0);
-		 fragmentColor = vertexColor;
-	}
-)";
-// end::vertexShader[]
+		string fileData( (std::istreambuf_iterator<char>(fileStream)),
+		                 (std::istreambuf_iterator<char>()          ));
 
-// tag::fragmentShader[]
-//string holding the **source** of our fragment shader, to save loading from a file
-const std::string strFragmentShader = R"(
-	#version 330
-	in vec4 fragmentColor;
-	out vec4 outputColor;
-	void main()
-	{
-		 outputColor = fragmentColor;
+		cout << "Shader Loaded from " << filePath << endl;
+		return fileData;
 	}
-)";
-// end::fragmentShader[]
+	else
+	{
+        cerr << "Shader could not be loaded - cannot read file " << filePath << ". File does not exist." << endl;
+        return "";
+	}
+}
+// end::loadShader[]
 
 //our variables
 bool done = false;
@@ -81,7 +76,7 @@ GLfloat color[] = { 1.0f, 1.0f, 1.0f }; //using different values from CPU and st
 // tag::GLVariables[]
 //our GL and GLSL variables
 GLuint theProgram; //GLuint that we'll fill in to refer to the GLSL program (only have 1 at this point)
-GLint positionLocation; //GLuint that we'll fill in with the location of the `position` attribute in the GLSL
+int positionLocation; //GLuint that we'll fill in with the location of the `position` attribute in the GLSL
 GLint vertexColorLocation; //GLuint that we'll fill in with the location of the `vertexColor` attribute in the GLSL
 
 GLuint vertexDataBufferObject;
@@ -97,7 +92,7 @@ GLuint vertexArrayObject;
 void initialise()
 {
 	if (SDL_Init(SDL_INIT_EVERYTHING) != 0){
-		cout << "SDL_Init Error: " << SDL_GetError() << std::endl;
+		cerr << "SDL_Init Error: " << SDL_GetError() << std::endl;
 		exit(1);
 	}
 	cout << "SDL initialised OK!\n";
@@ -120,7 +115,7 @@ void createWindow()
 	//error handling
 	if (win == nullptr)
 	{
-		std::cout << "SDL_CreateWindow Error: " << SDL_GetError() << std::endl;
+		std::cerr << "SDL_CreateWindow Error: " << SDL_GetError() << std::endl;
 		SDL_Quit();
 		exit(1);
 	}
@@ -150,7 +145,7 @@ void createContext()
 	context = SDL_GL_CreateContext(win);
 	if (context == nullptr){
 		SDL_DestroyWindow(win);
-		std::cout << "SDL_GL_CreateContext Error: " << SDL_GetError() << std::endl;
+		std::cerr << "SDL_GL_CreateContext Error: " << SDL_GetError() << std::endl;
 		SDL_Quit();
 		exit(1);
 	}
@@ -165,7 +160,7 @@ void initGlew()
 	glewExperimental = GL_TRUE; //GLEW isn't perfect - see https://www.opengl.org/wiki/OpenGL_Loading_Library#GLEW
 	rev = glewInit();
 	if (GLEW_OK != rev){
-		std::cout << "GLEW Error: " << glewGetErrorString(rev) << std::endl;
+		std::cerr << "GLEW Error: " << glewGetErrorString(rev) << std::endl;
 		SDL_Quit();
 		exit(1);
 	}
@@ -246,13 +241,13 @@ void initializeProgram()
 {
 	std::vector<GLuint> shaderList;
 
-	shaderList.push_back(createShader(GL_VERTEX_SHADER, strVertexShader));
-	shaderList.push_back(createShader(GL_FRAGMENT_SHADER, strFragmentShader));
+	shaderList.push_back(createShader(GL_VERTEX_SHADER, loadShader("vertexShader.glsl")));
+	shaderList.push_back(createShader(GL_FRAGMENT_SHADER, loadShader("fragmentShader.glsl")));
 
 	theProgram = createProgram(shaderList);
 	if (theProgram == 0)
 	{
-		cout << "GLSL program creation error." << std::endl;
+		cerr << "GLSL program creation error." << std::endl;
 		SDL_Quit();
 		exit(1);
 	}
@@ -282,7 +277,7 @@ void initializeVertexArrayObject()
 		glEnableVertexAttribArray(vertexColorLocation); //enable attribute at index vertexColorLocation
 
 		glVertexAttribPointer(positionLocation,    2, GL_FLOAT, GL_FALSE, (6 * sizeof(GL_FLOAT)), (GLvoid *) (0 * sizeof(GLfloat))); //specify that position data contains four floats per vertex, and goes into attribute index positionLocation
-		glVertexAttribPointer(vertexColorLocation, 4, GL_FLOAT, GL_FALSE, (6 * sizeof(GL_FLOAT)), (GLvoid *) (2 * sizeof(GLfloat))); //specify that position data contains four floats per vertex, and goes into attribute index positionLocation
+		glVertexAttribPointer(vertexColorLocation, 4, GL_FLOAT, GL_FALSE, (6 * sizeof(GL_FLOAT)), (GLvoid *) (2 * sizeof(GLfloat))); //specify that position data contains four floats per vertex, and goes into attribute index vertexColorLocation
 
 	glBindVertexArray(0); //unbind the vertexArrayObject so we can't change it
 
