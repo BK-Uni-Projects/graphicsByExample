@@ -29,16 +29,19 @@ solution "graphicsByExample"
 
 
           -- where are header files?
+          -- tag::headers[]
           configuration "windows"
           includedirs {
                         "./graphics_dependencies/SDL2/include",
-                        "./graphics_dependencies/glew/include"
+                        "./graphics_dependencies/glew/include",
+                        "./graphics_dependencies/glm",
                       }
           configuration { "linux" }
           includedirs {
                         "/usr/include/SDL2",
                       }
           configuration {}
+          -- end::headers[]
 
 
           -- what libraries need linking to
