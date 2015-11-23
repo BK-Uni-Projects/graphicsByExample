@@ -85,12 +85,6 @@ glm::vec3 position2 = { 0.8f, -0.5f , 0.0f};
 glm::vec3 velocity2 = { -0.2f, 0.15f, 0.0f};
 // end::gameState[]
 
-// tag::uniformValues[]
-glm::mat4 modelMatrix = glm::mat4(1.0f);
-glm::mat4 viewMatrix = glm::mat4(1.0f);
-glm::mat4 projectionMatrix = glm::mat4(1.0f);
-// end::uniformValues[]
-
 // tag::GLVariables[]
 //our GL and GLSL variables
 //programIDs
@@ -281,9 +275,12 @@ void initializeProgram()
 		cout << "GLSL program creation OK! GLUint is: " << theProgram << std::endl;
 	}
 
+	// tag::glGetAttribLocation[]
 	positionLocation = glGetAttribLocation(theProgram, "position");
 	vertexColorLocation = glGetAttribLocation(theProgram, "vertexColor");
+	// end::glGetAttribLocation[]
 
+	// tag::glGetUniformLocation[]
 	modelMatrixLocation = glGetUniformLocation(theProgram, "modelMatrix");
 	viewMatrixLocation = glGetUniformLocation(theProgram, "viewMatrix");
 	projectionMatrixLocation = glGetUniformLocation(theProgram, "projectionMatrix");
@@ -292,6 +289,7 @@ void initializeProgram()
 	assert( modelMatrixLocation != -1);
 	assert( viewMatrixLocation != -1);
 	assert( projectionMatrixLocation != -1);
+	// end::glGetUniformLocation[]
 
 	//clean up shaders (we don't need them anymore as they are no in theProgram
 	for_each(shaderList.begin(), shaderList.end(), glDeleteShader);
@@ -312,8 +310,10 @@ void initializeVertexArrayObject()
 		glEnableVertexAttribArray(positionLocation); //enable attribute at index positionLocation
 		glEnableVertexAttribArray(vertexColorLocation); //enable attribute at index vertexColorLocation
 
+		// tag::glVertexAttribPointer[]
 		glVertexAttribPointer(positionLocation,    3, GL_FLOAT, GL_FALSE, (7 * sizeof(GL_FLOAT)), (GLvoid *) (0 * sizeof(GLfloat))); //specify that position data contains four floats per vertex, and goes into attribute index positionLocation
 		glVertexAttribPointer(vertexColorLocation, 4, GL_FLOAT, GL_FALSE, (7 * sizeof(GL_FLOAT)), (GLvoid *) (3 * sizeof(GLfloat))); //specify that position data contains four floats per vertex, and goes into attribute index vertexColorLocation
+		// end::glVertexAttribPointer[]
 
 	glBindVertexArray(0); //unbind the vertexArrayObject so we can't change it
 
@@ -421,14 +421,14 @@ void render()
 	glBindVertexArray(vertexArrayObject);
 
 	//set projectionMatrix - how we go from 3D to 2D
-	glUniformMatrix4fv(projectionMatrixLocation, 0, false, glm::value_ptr(projectionMatrix));
+	glUniformMatrix4fv(projectionMatrixLocation, 0, false, glm::value_ptr(glm::mat4(1.0f)));
 
 	//set viewMatrix - how we control the view (viewpoint, view direction, etc)
-	glUniformMatrix4fv(viewMatrixLocation, 0, false, glm::value_ptr(viewMatrix));
+	glUniformMatrix4fv(viewMatrixLocation, 0, false, glm::value_ptr(glm::mat4(1.0f)));
 
 
 	//set modelMatrix and draw for triangle 1
-	modelMatrix = glm::translate(glm::mat4(1.0f), position1);
+	glm::mat4 modelMatrix = glm::translate(glm::mat4(1.0f), position1);
 	glUniformMatrix4fv(modelMatrixLocation, 1, false, glm::value_ptr(modelMatrix));
 	glDrawArrays(GL_TRIANGLES, 0, 3);
 
