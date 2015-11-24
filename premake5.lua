@@ -48,7 +48,7 @@ solution "graphicsByExample"
           configuration "windows"
              links { "SDL2", "SDL2main", "opengl32", "glew32" }
           configuration "linux"
-             links { "SDL2", "SDL2main", "GL", "GLEW" }
+             links { "SDL2", "SDL2main", "GL", "GLEW", "zmq" }
           configuration {}
 
 
