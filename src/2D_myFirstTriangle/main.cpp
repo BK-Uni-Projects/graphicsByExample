@@ -14,7 +14,7 @@
 #include <string>
 
 #include <GL/glew.h>
-#include <SDL.h>
+#include <SDL2/SDL.h>
 // end::includes[]
 
 // tag::using[]
