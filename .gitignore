@@ -7,6 +7,10 @@
 *.html
 *.xml
 
+## Ignore trace files
+
+*.trace
+
 ## Ignore binaries generated
 *-debug
 *-release
