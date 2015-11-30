@@ -477,8 +477,6 @@ int main( int argc, char* args[] )
 
 	glViewport(0,0,600,600); //should check what the actual window res is?
 
-	SDL_GL_SwapWindow(win); //force a swap, to make the trace clearer
-
 	//do stuff that only needs to happen once
 	//- create shaders
 	//- load vertex data
