@@ -286,9 +286,9 @@ void initializeProgram()
 	projectionMatrixLocation = glGetUniformLocation(theProgram, "projectionMatrix");
 
 	//only generates runtime code in debug mode
-	assert( modelMatrixLocation != -1);
-	assert( viewMatrixLocation != -1);
-	assert( projectionMatrixLocation != -1);
+	SDL_assert_release( modelMatrixLocation != -1);
+	SDL_assert_release( viewMatrixLocation != -1);
+	SDL_assert_release( projectionMatrixLocation != -1);
 	// end::glGetUniformLocation[]
 
 	//clean up shaders (we don't need them anymore as they are no in theProgram
