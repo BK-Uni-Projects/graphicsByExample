@@ -4,7 +4,7 @@
 #include <string>
 
 #include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
+#include <SDL_image.h>
 
 std::string exeName;
 SDL_Window *win; //pointer to the SDL_Window
