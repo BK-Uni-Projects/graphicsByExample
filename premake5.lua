@@ -33,6 +33,7 @@ solution "graphicsByExample"
           configuration "windows"
           includedirs {
                         "./graphics_dependencies/SDL2/include",
+                        "./graphics_dependencies/SDL2/include/SDL2",
                         "./graphics_dependencies/glew/include",
                         "./graphics_dependencies/glm",
                         "./graphics_dependencies/SDL2_image/include",
